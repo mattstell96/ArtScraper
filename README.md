@@ -87,10 +87,13 @@ sleep(10)
 
 **Step 4. Generate A List of URLs Using Artists' First and Last Name ** <br/>
 
-*NOTE: the list of artists (csv) was previously generated*<br/>
+*NOTE: Artsy follows a specific name formatting for artists (first-middle-last), which can be leveraged to create the URLs. *<br/>
 
 ```py
 #URLS BUILDER
+ 
+#WRITE ARTISTS NAME HERE USING THE FORMAT name-middlename-surname
+my_artists = ['jean-michel-basquiat']
 
 my_urls = []
 
