@@ -1,4 +1,4 @@
-<h1> Art Auction Prices: Dataset Generation With Scraping And APIs </h1>
+<h1> Art Auction Prices: Dataset Generation With Scraping</h1>
 
 <h2>Description</h2>
 
