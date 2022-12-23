@@ -1,7 +1,17 @@
 <h1> Art Auction Prices: Dataset Generation With Scraping And APIs </h1>
 
 <h2>Description</h2>
-Describe project here
+
+The aim of this project is to create a dataset about paintings auction prices by scraping Artsy.net database. The final dataset will contain information regarding the:
++ Painter
++ Painting Name
++ Medium
++ Auction Sale Date
++ Auction House / Dealer
++ Hammer Price (Sale Price)
++ Premium with Respect to Estimate
++ Size
+
 <br />
 
 
