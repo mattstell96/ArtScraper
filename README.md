@@ -17,9 +17,20 @@ Describe project here
 - <b>macOS Monterey</b>
 - <b>Chrome98.dmg</b>
 
+💡 Chrome98 can be also installed directly within the coding environment using the following code:
+
+```py
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+driver = webdriver.Chrome(ChromeDriverManager().install())
+```
+
 <h2>Project walk-through:</h2>
 
 <p align="center">
+ 
+<h3> Setup </h3>
 
 **Step 1. Load Libraries** <br/>
 
@@ -29,7 +40,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import time
 
 #Parsing
 import requests
@@ -42,24 +52,21 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
-
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 ```
 
 <br />
 
-**Step 2. Instantiate ChromeDriver: Open Artsy.net** <br/>
+**Step 2. Instantiate ChromeDriver & Open Artsy.net** <br/>
 
 ```py
 # create an instance of web driver
-driver = webdriver.Chrome(ChromeDriverManager().install())
+driver = Chrome('/Users/matteo-stelluti/Desktop/ADV_PYTHON/ART_PROJECT/PHASE 4/Data/chromedriver')
 
 main_page_url = 'https://www.artsy.net/'
 
 #Open Artsy
 driver.get(main_page_url)
-sleep(10) #Give some time open the website
+sleep(5)
 ```
 
 <br />
@@ -67,149 +74,399 @@ sleep(10) #Give some time open the website
 **Step 3. Execute Login** <br/>
 
 ```py
-login = driver.find_element(by=By.XPATH, value='//*[@class ="Button__Container-sc-1bhxy1c-0 fnJjPI"]')
-login.click()
-
 #Login Button CLICK --> Shows pop up window
+driver.find_element_by_xpath('//*[@class ="Button__Container-sc-1ckr5i3-0 dDcOsO"]').click()
 
 user = driver.find_element_by_xpath('//*[@name ="email"]')
 passw = driver.find_element_by_xpath('//*[@name ="password"]')
-login_click = driver.find_element_by_xpath('//*[@class ="Button__Container-sc-1bhxy1c-0 gMKEFL"]')
+login = driver.find_element_by_xpath('//*[@class ="Button__Container-sc-1ckr5i3-0 fWQVvr"]')
 
 #HERE WE LOG-IN USING THE WEB ELEMENTS THAT WE SAVED
-user.send_keys( YOUR EMAIL HERE );
-passw.send_keys( YOUR PASSWORD HERE );
-login_click.click()
-sleep(10)
+user.send_keys(YOUR ARTSY.NET EMAIL HERE);
+passw.send_keys(YOUR PASSWORD HERE);
+login.click()
+sleep(5)
 ```
 
 <br />
 
-**Step 4. Generate A List of URLs Using Artists' First and Last Name** <br/>
+<h3> Scraping </h3>
 
-*NOTE: Artsy follows a specific name formatting for artists (first-middle-last), which can be leveraged to create the URLs. *<br/>
+**Step 4. Upload the List Of Artists ** <br/>
 
-```py
-#URLS BUILDER
- 
-#WRITE ARTISTS NAME HERE USING THE FORMAT name-middlename-surname
-my_artists = ['jean-michel-basquiat']
+*NOTE: This list of artists was pre-made, and you can find it in the repo*<br/>
 
-my_urls = []
-
-for artist in my_artists:
-    url = []
-    url='https://www.artsy.net/artist/'+str(artist)+'/auction-results?categories%5B0%5D=Painting'
-    my_urls.append(url)
+```p
+urls_filtered = pd.read_csv(FILE PATH HERE)
+urls_filtered = urls_filtered.URL.tolist()
 ```
 
 <br />
 
-**Step 5. Crawl and Scrape using Selenium** <br/>
+**Step 6. Crawling & Scraping ** <br/>
 
-First of all, let's define how many webpages we should crawl onto for a given artist<br/>
-
-```py
-pages = 5
-```
-
-Then, let's proceed with the scraping <br/>
-
-```py
-
+```p
 artwork_df = []
-iterations = 0 #this is the iterations list that allows us to limit the pages to crowl to a given number...5
 
-for url in my_urls:
+for url in urls_filtered:
     
     driver.get(url)
     
-    next_page = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/nav/a')
+    #Step 1. Check if the artist has the market signal section
+    
+    try: 
+        signal = driver.find_element(By.XPATH,value='//*[@id="main"]/div/div/div/div[4]/div[2]/div[1]')
+        signal.text == 'Market Signals More info'
         
-    while True:
+        #A] Artists with the signal section
+        
+        #i. Open the artwork boxes for the additional info
+        
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[2]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[5]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[8]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)        
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[11]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[14]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[17]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[20]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[23]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[26]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[29]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        
+        #ii. Create a list with all the data from the 10 artwork boxes found on each page
+        
+        next_page = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/nav/a')
 
-        if iterations == pages: #YOU CAN SET HOW MANY ITERATIONS YOU DESIRE
-            break
-        else:
-            
-            driver.get(url)
-            
-            iterations += 1 #Here we add the iteration count
-            
-            box1 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[1]').text
-            box2 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[2]').text
-            box3 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[3]').text
-            box4 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[4]').text
-            box5 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[5]').text
-            box6 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[6]').text
-            box7 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[7]').text
-            box8 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[8]').text
-            box9 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[9]').text
-            box10 = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/button[10]').text         
-            
-            artboxes = [box1,box2,box3,box4,box5,box6,box7,box8,box9,box10]
-            
-            paintings = []
-            
-            for box in artboxes:
-                if len(box)<10:
-                    pass
-                else:
-                    paintings.append(box)
-                    
-            for painting in paintings:
-                painting_info = []
-                
-                #ARTIST NAME
-                name = url.split('artist/', 1)[1].split('/auction')[0]
-                painting_info.append(name)
-                
-                #TITLE
-                
-                title = painting.split("\n")[0].split(",")[0]  
-                painting_info.append(title)
-                
-                #YEAR
+        iterations = 0 #this is the iterations list that allows us to limit the pages to crowl to a given number...5
+        
+        while True:
 
-                year = painting.split("\n")[0].split(",")[1]
-                painting_info.append(year)
-                
-                #MEDIUM
-                medium = painting.split("\n")[1]
-                painting_info.append(medium)
-                
-                #SALE_DATE
-                date = painting.split("\n")[2]
-                painting_info.append(date)
-                
-                #HOUSE
-                house = painting.split("\n")[3]
-                painting_info.append(house)
-                
-                #PRICE
-                price = painting.split("\n")[4]
-                painting_info.append(price)
-                
-                #PRICE_USD
-                #price_usd = 
+            if iterations ==5: #YOU CAN SET HOW MANY ITERATIONS YOU DESIRE
+                break
+            else:
+                iterations += 1 #Here we add the iteration count
+
+                art_box1 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[2]')
+                art_box2 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[5]')
+                art_box3 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[8]')
+                art_box4 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[11]')
+                art_box5 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[14]')
+                art_box6 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[17]')
+                art_box7 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[20]')
+                art_box8 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[23]')
+                art_box9 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[26]')
+                art_box10 = driver.find_elements(By.XPATH, '//*[@id ="main"]/div/div/div/div[4]/div[7]/div[2]/div[3]/div[2]/div[29]')
+
+                art_boxes = [art_box1,art_box2,art_box3,art_box4,art_box5,art_box6,art_box7,art_box8,art_box9,art_box10]
+
+                arts_box_1toN = [] #This list will have n paintings out of 10 depending on the page
+
+                for box in art_boxes:
+                    if len(box)>0:
+                        info = box[0].text.splitlines()
+                        arts_box_1toN.append(info)
+                        
+                #iii. Loop over the n paintings of this i page to extract the info and put it in a list
+
+                for art_box in arts_box_1toN: #AKA: For a single painting (1 of the 10) in a given page
+
+                    art_box_fields = []
+
+                    name = url.split('artist/', 1)[1].split('/auction')[0]
+                    art_box_fields.append(name)
                     
-                artwork_df.append(painting_info)
+                    if len(art_box)==19: # HERE WE GET THE ITEMS FOR THOSE WITH SALEPRICE IN ANOTHER CURRENCY
+                    
+                        try:
+                            title = art_box[0].split(",")[0].replace(',','')
+                        except:
+                            title = ''
+                        art_box_fields.append(title)
+                        try:
+                            year = art_box[0].split(",")[1].replace(',','')
+                        except:
+                            year = ''
+                        art_box_fields.append(year)
+                        try:
+                            medium = art_box[1]
+                        except:
+                            medium = ''
+                        art_box_fields.append(medium)
+                        try:
+                            sale_date = art_box[2]
+                        except:
+                            sale_date = ''
+                        art_box_fields.append(sale_date)
+                        try:
+                            auction_house = art_box[3]
+                        except:
+                            auction_house = ''
+                        art_box_fields.append(auction_house)
+                        try:
+                            realized_price_US = art_box[5]
+                        except:
+                            realized_price_US = ''
+                        art_box_fields.append(realized_price_US)
+                        try:
+                            premium_v_est = art_box[7]
+                        except:
+                            premium_v_est = ''
+                        art_box_fields.append(premium_v_est)
+                        try:
+                            size = art_box[11]
+                        except:
+                            size = ''
+                        art_box_fields.append(size)
+
+                    elif len(art_box)==18: # HERE WE GET THE ITEMS FOR THOSE WITH ONLY DOLLAR SALEPRICE
+                        
+                        try:
+                            title = art_box[0].split(",")[0].replace(',','')
+                        except:
+                            title = ''
+                        art_box_fields.append(title)
+                        try:
+                            year = art_box[0].split(",")[1].replace(',','')
+                        except:
+                            year = ''
+                        art_box_fields.append(year)
+                        try:
+                            medium = art_box[1]
+                        except:
+                            medium = ''
+                        art_box_fields.append(medium)
+                        try:
+                            sale_date = art_box[2]
+                        except:
+                            sale_date = ''
+                        art_box_fields.append(sale_date)
+                        try:
+                            auction_house = art_box[3]
+                        except:
+                            auction_house = ''
+                        art_box_fields.append(auction_house)
+                        try:
+                            realized_price_US = art_box[4]
+                        except:
+                            realized_price_US = ''
+                        art_box_fields.append(realized_price_US)
+                        try:
+                            premium_v_est = art_box[6]
+                        except:
+                            premium_v_est = ''
+                        art_box_fields.append(premium_v_est)
+                        try:
+                            size = art_box[10]
+                        except:
+                            size = ''
+                        art_box_fields.append(size)
+
+
+                    #add the list with the painting info to a list that will contain all the paintings
+                    artwork_df.append(art_box_fields)
+                    
+                next_page.click()
+                sleep(1)
+        
+    except:
+        #B] Artists without the signal section
+        
+        #i. Open the artwork boxes for the additional info
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[2]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[5]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[8]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)        
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[11]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[14]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[17]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[20]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[23]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[26]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        try:
+            driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[29]/div/div[1]/div/div[4]/div/div[2]').click()
+            sleep(1)
+        except:
+            pass
+        
+        #ii. Create a list with all the data from the 10 artwork boxes found on each page
+        
+        iterations = 0 #this is the iterations list that allows us to limit the pages to crowl to a given number...5
+        
+        next_page = driver.find_element(by=By.XPATH, value='//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/nav/a')
+
+        while True:
+
+            if iterations ==5: #YOU CAN SET HOW MANY ITERATIONS YOU DESIRE
+                break
+            else:
+                iterations += 1 #Here we add the iteration count
+
+                art_box1 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[2]')
+                art_box2 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[5]')
+                art_box3 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[8]')
+                art_box4 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[11]')
+                art_box5 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[14]')
+                art_box6 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[17]')
+                art_box7 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[20]')
+                art_box8 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[23]')
+                art_box9 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[26]')
+                art_box10 = driver.find_elements(By.XPATH, '//*[@id="main"]/div/div/div/div[4]/div[6]/div[2]/div[3]/div[2]/div[29]')
+
+                art_boxes = [art_box1,art_box2,art_box3,art_box4,art_box5,art_box6,art_box7,art_box8,art_box9,art_box10]
+
+                arts_box_1toN = []
+
+                for box in art_boxes: #This loop cleans the elements above in case there are less than 10 paintings
+                    if len(box)>0:
+                        info = box[0].text.splitlines()
+                        arts_box_1toN.append(info)
                 
-                i+=1
+                #iii. Loop over the n paintings of this i page to extract the info and put it in a list
+                for art_box in arts_box_1toN: #AKA: For a single painting (1 of the 10) in a given page
+
+                    art_box_fields = []
+                    
+                    name = url.split('artist/', 1)[1].split('/auction')[0]
+                    art_box_fields.append(name)
+
+                    try:
+                        title = art_box[0].split(",")[0].replace(',','')
+                    except:
+                        title = ''
+                    art_box_fields.append(title)
+                    try:
+                        year = art_box[0].split(",")[1].replace(',','')
+                    except:
+                        year = ''
+                    art_box_fields.append(year)
+                    try:
+                        medium = art_box[1]
+                    except:
+                        medium = ''
+                    art_box_fields.append(medium)
+                    try:
+                        sale_date = art_box[2]
+                    except:
+                        sale_date = ''
+                    art_box_fields.append(sale_date)
+                    try:
+                        auction_house = art_box[3]
+                    except:
+                        auction_house = ''
+                    art_box_fields.append(auction_house)
+                    try:
+                        realized_price_US = art_box[5]
+                    except:
+                        realized_price_US = ''
+                    art_box_fields.append(realized_price_US)
+                    try:
+                        premium_v_est = art_box[7]
+                    except:
+                        premium_v_est = ''
+                    art_box_fields.append(premium_v_est)
+                    try:
+                        size = art_box[11]
+                    except:
+                        size = ''
+                    art_box_fields.append(size)
+
+                #add the list with the painting info to a list that will contain all the paintings
+                    artwork_df.append(art_box_fields)
                 
-            next_page.click()
-            sleep(2)
+                next_page.click()
+                sleep(1)
 ```
 
 <br />
 
-**Step 6. Close the driver** <br/>
+**Step 7. Convert to DF & Check Results ** <br/>
 
 ```py
-driver.quit()
+paintings_df = pd.DataFrame(artwork_df)
+paintings_df.head()
 ```
 
+OUTPUT:<br/>
+<img src="https://imgur.com/Q6A9BVi" height="80%" width="80%" alt="First output"/>
+
 <br />
+
 
 </p>
 
