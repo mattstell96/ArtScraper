@@ -18,7 +18,9 @@ The aim of this project is to create a dataset about paintings auction prices by
 
 <h2>Python Libraries and Utilities</h2>
 
- - <b>Selenium</b> 
+ - <b>Selenium</b>
+ - <b>Pandas</b>
+ 
  
 <br />
 
@@ -49,15 +51,9 @@ driver = webdriver.Chrome(ChromeDriverManager().install())
 ```py
 #Basic
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-#Parsing
+#Scraping
 import requests
-from bs4 import BeautifulSoup
-
-#Crawling
 import lxml
 from selenium.webdriver import Chrome
 from selenium.webdriver.support.ui import WebDriverWait
