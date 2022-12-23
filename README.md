@@ -17,7 +17,7 @@ Describe project here
 - <b>macOS Monterey</b>
 - <b>Chrome98.dmg</b>
 
-<h2>Program walk-through:</h2>
+<h2>Project walk-through:</h2>
 
 <p align="center">
 
@@ -64,7 +64,7 @@ sleep(10) #Give some time open the website
 
 <br />
 
-**Step 3. Execute Login  ** <br/>
+**Step 3. Execute Login** <br/>
 
 ```py
 login = driver.find_element(by=By.XPATH, value='//*[@class ="Button__Container-sc-1bhxy1c-0 fnJjPI"]')
@@ -85,7 +85,7 @@ sleep(10)
 
 <br />
 
-**Step 4. Generate A List of URLs Using Artists' First and Last Name ** <br/>
+**Step 4. Generate A List of URLs Using Artists' First and Last Name** <br/>
 
 *NOTE: Artsy follows a specific name formatting for artists (first-middle-last), which can be leveraged to create the URLs. *<br/>
 
@@ -105,7 +105,7 @@ for artist in my_artists:
 
 <br />
 
-**Step 5. Crawl and Scrape using Selenium ** <br/>
+**Step 5. Crawl and Scrape using Selenium** <br/>
 
 First of all, let's define how many webpages we should crawl onto for a given artist<br/>
 
@@ -203,7 +203,7 @@ for url in my_urls:
 
 <br />
 
-**Step 6. Close the driver ** <br/>
+**Step 6. Close the driver** <br/>
 
 ```py
 driver.quit()
