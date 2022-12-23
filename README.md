@@ -98,8 +98,6 @@ for artist in my_artists:
     url = []
     url='https://www.artsy.net/artist/'+str(artist)+'/auction-results?categories%5B0%5D=Painting'
     my_urls.append(url)
-    
-artwork_df = []
 ```
 
 <br />
@@ -115,6 +113,8 @@ pages = 5
 Then, let's proceed with the scraping <br/>
 
 ```py
+
+artwork_df = []
 iterations = 0 #this is the iterations list that allows us to limit the pages to crowl to a given number...5
 
 for url in my_urls:
