@@ -92,7 +92,7 @@ sleep(5)
 
 <h3> Scraping </h3>
 
-**Step 4. Upload the List Of Artists ** <br/>
+**Step 4. Upload the List Of Artists** <br/>
 
 *NOTE: This list of artists was pre-made, and you can find it in the repo*<br/>
 
@@ -103,7 +103,7 @@ urls_filtered = urls_filtered.URL.tolist()
 
 <br />
 
-**Step 6. Crawling & Scraping ** <br/>
+**Step 6. Crawling & Scraping** <br/>
 
 ```p
 artwork_df = []
@@ -455,7 +455,7 @@ for url in urls_filtered:
 
 <br />
 
-**Step 7. Convert to DF & Check Results ** <br/>
+**Step 7. Convert to DF & Check Results** <br/>
 
 ```py
 paintings_df = pd.DataFrame(artwork_df)
@@ -463,10 +463,19 @@ paintings_df.head()
 ```
 
 OUTPUT:<br/>
-<img src="https://imgur.com/Q6A9BVi" height="80%" width="80%" alt="First output"/>
+<img src="https://i.imgur.com/Q6A9BVi.png" height="80%" width="80%" alt="First output"/>
+
+Everything worked out.
 
 <br />
 
+**Step 8. Close the Driver** <br/>
+
+```py
+driver.quit()
+```
+
+<br />
 
 </p>
 
