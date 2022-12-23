@@ -96,7 +96,7 @@ sleep(5)
 
 *NOTE: This list of artists was pre-made, and you can find it in the repo*<br/>
 
-```p
+```py
 urls_filtered = pd.read_csv(FILE PATH HERE)
 urls_filtered = urls_filtered.URL.tolist()
 ```
@@ -105,7 +105,7 @@ urls_filtered = urls_filtered.URL.tolist()
 
 **Step 6. Crawling & Scraping** <br/>
 
-```p
+```py
 artwork_df = []
 
 for url in urls_filtered:
