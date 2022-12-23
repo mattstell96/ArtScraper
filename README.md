@@ -1,5 +1,7 @@
 <h1> Art Auction Prices: Dataset Generation With Scraping</h1>
 
+<p align="center">
+
 <h2>Description</h2>
 
 The aim of this project is to create a dataset about paintings auction prices by scraping Artsy.net database. The final dataset will contain information regarding the:
@@ -14,13 +16,11 @@ The aim of this project is to create a dataset about paintings auction prices by
 
 <br />
 
-
 <h2>Python Libraries and Utilities</h2>
 
-
- - <b>Selenium</b>
- - <b>Pytrends (Google)</b>
- - <b>GoogleNews (Google)</b>    
+ - <b>Selenium</b> 
+ 
+<br />
 
 <h2>Environments Used </h2>
 
@@ -36,9 +36,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 driver = webdriver.Chrome(ChromeDriverManager().install())
 ```
 
+<br />
+
 <h2>Project walk-through:</h2>
 
-<p align="center">
+<br />
  
 <h3> Setup </h3>
 
